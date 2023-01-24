@@ -61,7 +61,7 @@ HugeInteger::HugeInteger() {
 }
 
 HugeInteger HugeInteger::add(const HugeInteger& h) {
-	HugeInteger sum;
+	std::string sum = "";
 	std::vector<int> temp_h = h.number;
 
 	// adding leading 0's to fill up smaller vector to force same size 
@@ -79,18 +79,20 @@ HugeInteger HugeInteger::add(const HugeInteger& h) {
 	}
 
 	int carry = 0;
-	for (int i = 0; i < this->number.size(); i++) {
+	for (int i = this->number.size() - 1; i >= 0; i--) {
 		int digit1 = this->number[i];
 		int digit2 = temp_h[i];
-		digit1 = digit1 % 10 + digit2 + carry;
+		digit1 = digit1 + digit2 + carry;
 		carry = digit1 / 10;
-		sum.number.push_back(digit1);
+		digit1 %= 10;
+		sum.std::string::insert(0, 1, digit1 + 48);
 	}
 
 	if (carry > 0) {
-		sum.number[0]+=(carry);
+		sum.std::string::insert(0, 1, carry + 48);
 	}
-	return sum;
+
+	return HugeInteger(sum);
 }
 
 
