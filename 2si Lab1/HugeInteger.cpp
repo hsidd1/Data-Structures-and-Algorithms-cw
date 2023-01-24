@@ -29,7 +29,7 @@ HugeInteger::HugeInteger(int n) {
 
 /* creates a random HugeInteger of n digits, the first digit
 being different from 0; n must be larger or equal to 1.*/
-
+	sign = false;
 	if (n < 1) {
 		throw std::invalid_argument("Error: n must be larger than or equal to 1");
 	}
@@ -46,13 +46,57 @@ being different from 0; n must be larger or equal to 1.*/
 	}
 }
 
-HugeInteger HugeInteger::add(const HugeInteger& h) {
-
-/* Returns a new HugeInteger representing the sum of this HugeInteger and h.*/
-
-
-	return HugeInteger("");
+/* Copy Constructor */
+HugeInteger::HugeInteger(const HugeInteger& k) {
+	this->sign = k.sign;
+	for (int i = 0; i < k.number.size(); i++) {
+		this->number.push_back(k.number[i]);
+	}
 }
+
+/* Default constructor */
+HugeInteger::HugeInteger() {
+	number = std::vector<int>();
+	sign = false;
+}
+
+HugeInteger HugeInteger::add(const HugeInteger& h) {
+	HugeInteger sum;
+	std::vector<int> temp_h = h.number;
+
+	// adding leading 0's to fill up smaller vector to force same size 
+	if (this->number.size() < temp_h.size()) {
+		int diff = temp_h.size() - this->number.size();
+		for (int i = 0; i < diff; i++) {
+			this->number.insert(this->number.begin(), 0);
+		}
+	}
+	else {
+		int diff = this->number.size() - temp_h.size();
+		for (int i = 0; i < diff; i++) {
+			temp_h.insert(temp_h.begin(), 0);
+		}
+	}
+
+	int carry = 0;
+	for (int i = 0; i < this->number.size(); i++) {
+		int digit1 = this->number[i];
+		int digit2 = temp_h[i];
+		digit1 = digit1 % 10 + digit2 + carry;
+		carry = digit1 / 10;
+		sum.number.push_back(digit1);
+	}
+
+	if (carry > 0) {
+		sum.number[0]+=(carry);
+	}
+	return sum;
+}
+
+
+
+
+
 
 HugeInteger HugeInteger::subtract(const HugeInteger& h) {
 	// TODO
