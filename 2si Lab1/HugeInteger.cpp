@@ -61,6 +61,22 @@ HugeInteger::HugeInteger() {
 }
 
 HugeInteger HugeInteger::add(const HugeInteger& h) {
+	bool aNeg = this->sign;
+	bool bNeg = h.sign;
+
+	if (aNeg && bNeg) {
+		// both are negative --> add them as positives and add a minus sign?
+		
+		std::string output =  Positiveadd(HugeInteger(h)).toString();
+		output.std::string::insert(0, "-");
+		return HugeInteger(output);
+	}
+	else if (!aNeg && bNeg) {
+
+	}
+}
+
+HugeInteger HugeInteger::Positiveadd(const HugeInteger& h) {
 	std::string sum = "";
 	std::vector<int> temp_h = h.number;
 
@@ -82,7 +98,7 @@ HugeInteger HugeInteger::add(const HugeInteger& h) {
 	for (int i = this->number.size() - 1; i >= 0; i--) {
 		int digit1 = this->number[i];
 		int digit2 = temp_h[i];
-		digit1 = digit1 + digit2 + carry;
+		digit1 += digit2 + carry;
 		carry = digit1 / 10;
 		digit1 %= 10;
 		sum.std::string::insert(0, 1, digit1 + 48);
@@ -95,14 +111,38 @@ HugeInteger HugeInteger::add(const HugeInteger& h) {
 	return HugeInteger(sum);
 }
 
-
-
-
-
-
 HugeInteger HugeInteger::subtract(const HugeInteger& h) {
-	// TODO
-	return HugeInteger("");
+	/*Returns a new HugeInteger
+representing the difference between this HugeInteger and h.*/
+	std::string sub;
+	std::vector<int> temp_h = h.number;
+	if (this->number.size() < temp_h.size()) {
+		int diff = temp_h.size() - this->number.size();
+		for (int i = 0; i < diff; i++) {
+			this->number.insert(this->number.begin(), 0);
+		}
+	}
+	else {
+		int diff = this->number.size() - temp_h.size();
+		for (int i = 0; i < diff; i++) {
+			temp_h.insert(temp_h.begin(), 0);
+		}
+	}
+
+	int borrow = 0;
+	for (int i = this->number.size() - 1; i >= 0; i--) {
+		int digit1 = this->number[i];
+		int digit2 = temp_h[i];
+		digit1 -= (digit2 + borrow);
+		if (digit1 < 0) {
+			digit1 += 10;
+			borrow = 1;
+		}
+		else
+			borrow = 0;
+		sub.std::string::insert(0, 1, digit1 + 48);
+	}
+	return HugeInteger(sub);
 }
 
 HugeInteger HugeInteger::multiply(const HugeInteger& h) {
@@ -111,8 +151,42 @@ HugeInteger HugeInteger::multiply(const HugeInteger& h) {
 }
 
 int HugeInteger::compareTo(const HugeInteger& h) {
-	// TODO
-	return 0;
+	// if this has more digits or if this is positive and h is negative
+	if ((!this->sign && h.sign) || this->number.size() > h.number.size() ) {
+		return 1;
+	}
+	// if h has more digits or if h is positive and this is negative
+	else if ((!h.sign && this->sign) || h.number.size() > this->number.size() ) {
+		return -1;
+	}
+	else { // same length
+		//std::_Vector_iterator<std::_Vector_val<std::_Simple_types<int>>> it_this = this->number.begin();
+		//auto it_h = h.number.begin();
+
+		//auto MSB_this = this->number.front();
+		//auto MSB_h = h.number.front();
+
+		for (int i = 0; i < this->number.size(); i++) {
+			if (this->number[i] > h.number[i]) {
+				return 1;
+			}
+			else if (h.number[i] > this->number[i]) {
+				return -1;
+			}
+			else return 0;
+			/*
+			if (MSB_this > MSB_h)
+				return 1;
+			else if (MSB_h > MSB_this) {
+				return -1;
+			}
+			else return 0;
+
+			it_this++;
+			it_h++;
+			*/
+		}
+	}
 }
 
 std::string HugeInteger::toString() {
