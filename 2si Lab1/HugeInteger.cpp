@@ -312,7 +312,6 @@ HugeInteger HugeInteger::multiply(const HugeInteger& h) {
 }
 
 
-
 int HugeInteger::compareTo(const HugeInteger& h) {
 	/*Returns -1 if this HugeInteger is less
 than h, 1 if this HugeInteger is larger than h, and 0 if this HugeInteger is equal
@@ -326,13 +325,13 @@ to h.*/
 	}
 
 	// if this has more digits than h
-	if (this->number.size() > h.number.size() ) {
+	if (this->number.size() > h.number.size()) {
 		if (!this->sign && !h.sign)
 			return 1;
 		else return -1;
 	}
 	// if h has more digits than this
-	else if (h.number.size() > this->number.size() ) {
+	else if (h.number.size() > this->number.size()) {
 		if (!h.sign && !this->sign)
 			return -1;
 		else return 1;
@@ -352,8 +351,10 @@ to h.*/
 					return -1;
 				else return 1;
 			}
-			else return 0;
+			else if (h.number[i] < this->number[i]) return 1;
 		}
+		return 0;
+
 	}
 }
 
