@@ -85,7 +85,8 @@ HugeInteger HugeInteger::add(const HugeInteger& h) {
 			return HugeInteger(sum);
 		}
 		if (!aNeg && bNeg) { // pos and neg
-			return stdsub(h);
+			b.sign = false;
+			return subtract(b);
 		}
 		if (!aNeg && !bNeg) { // both positive
 			return Positiveadd(h);
@@ -100,8 +101,8 @@ HugeInteger HugeInteger::add(const HugeInteger& h) {
 			return Positiveadd(h);
 		}
 		if (aNeg && !bNeg) { // neg and pos
-
-			return b.subtract(*this);
+			this->sign = false;
+			return b.subtract(*this); // returns b - a 
 		}
 	}
 	/*
