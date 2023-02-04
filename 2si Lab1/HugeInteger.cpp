@@ -63,21 +63,76 @@ HugeInteger::HugeInteger() {
 HugeInteger HugeInteger::add(const HugeInteger& h) {
 	bool aNeg = this->sign;
 	bool bNeg = h.sign;
+	HugeInteger b = h;
 
-	if (aNeg && bNeg) {
-		// both are negative --> add them as positives and add a minus sign?
+	HugeInteger temp_h = h;
+	if (this->toString() == "0") { return HugeInteger(h); }
+	if (temp_h.toString() == "0") {return HugeInteger(*this); }
+
+	if (this->compareTo(h) == 0) {
+		if (aNeg && bNeg) { // both negative
+			std::string sum = "-" + Positiveadd(h).toString();
+			return HugeInteger(sum);
+		}
 		
-		std::string output =  Positiveadd(HugeInteger(h)).toString();
+		if (!aNeg && !bNeg) { // both positive
+			return Positiveadd(h);
+		}
+	}
+	if (this->compareTo(h) == 1) {
+		if (aNeg && bNeg) { // both negative
+			std::string sum = "-" + Positiveadd(h).toString();
+			return HugeInteger(sum);
+		}
+		if (!aNeg && bNeg) { // pos and neg
+			return stdsub(h);
+		}
+		if (!aNeg && !bNeg) { // both positive
+			return Positiveadd(h);
+		}
+	}
+	if (this->compareTo(h) == -1) {
+		if (aNeg && bNeg) { // both negative
+			std::string sum = "-" + Positiveadd(h).toString();
+			return HugeInteger(sum);
+		}
+		if (!aNeg && !bNeg) { // both positive
+			return Positiveadd(h);
+		}
+		if (aNeg && !bNeg) { // neg and pos
+
+			return b.subtract(*this);
+		}
+	}
+	/*
+	if (aNeg && bNeg) {
+		// both are negative --> add them as positives and add a minus sign
+
+		std::string output = Positiveadd(HugeInteger(h)).toString();
 		output.std::string::insert(0, "-");
 		return HugeInteger(output);
 	}
+	
 	else if (!aNeg && bNeg) {
-
+		// a is positive and b is negative
+		// return a subtract b
+		return stdsub(HugeInteger(h));
 	}
+	else if (aNeg && !bNeg) {
+		// a is negative and b is positive 
+		// return b subtact a 
+		HugeInteger b = h;
+		return b.subtract(HugeInteger(*this));
+	}
+	else {
+		// a and b are positive
+		return Positiveadd(HugeInteger(h));
+	}
+	*/
 }
 
 HugeInteger HugeInteger::Positiveadd(const HugeInteger& h) {
-	std::string sum = "";
+	std::string sum;
 	std::vector<int> temp_h = h.number;
 
 	// adding leading 0's to fill up smaller vector to force same size 
@@ -114,8 +169,104 @@ HugeInteger HugeInteger::Positiveadd(const HugeInteger& h) {
 HugeInteger HugeInteger::subtract(const HugeInteger& h) {
 	/*Returns a new HugeInteger
 representing the difference between this HugeInteger and h.*/
+	std::string sub = "";
+	std::vector<int> temp_h = h.number;
+	HugeInteger another_h = h;
+
+	// ----------- checking zeros ------------------------------------------------------//
+	//if (this->toString() == another_h.toString()) { return HugeInteger("0"); }
+	if (this->toString() == "0") {
+		if (!another_h.sign) // 0 - a positive number
+		{
+			if (another_h.toString() == "0") return HugeInteger(*this);
+			sub += "-" + another_h.toString();
+			return HugeInteger(sub);
+		}
+		else { // 0 - negative number 
+			sub = another_h.toString();
+			sub.erase(0, 1); // remove the - 
+			return HugeInteger(sub);
+		}
+	}
+	if (another_h.toString() == "0") { return HugeInteger(*this); } // any number - 0 
+// -----------------------------------------------------------------------------------//
+
+	// sign trackers 
+	bool aNeg = this->sign;
+	bool bNeg = h.sign;
+
+	// ---------------- checking compareTo conditions -------------------------------//
+	if (this->compareTo(h) == 1) { // this is larger than h 
+		if (!aNeg && !bNeg) { // both pos
+			return stdsub(HugeInteger(h)); // standard subtraction
+		}
+		if (aNeg && bNeg) { // both neg
+			return another_h.stdsub(*this); // wanna make both pos and do h - this 
+		}
+		if (!aNeg && bNeg) { // +ve - a positive
+			return Positiveadd(HugeInteger(h));
+		}
+		// not even possible for a -ve to be bigger than a pos
+		if (aNeg && !bNeg) {
+			sub += "-" + Positiveadd(HugeInteger(h)).toString();// wanna add them and add a - sign
+			return HugeInteger(sub);
+		}
+	}
+
+	if (this->compareTo(h) == 0) { // same 
+		//if (aNeg && bNeg) { // neg - neg
+		//	sub += "-" + Positiveadd(h).toString();
+		//	return HugeInteger(sub);
+		//}
+		//else if (!aNeg && !bNeg) { // same and both pos 
+			return HugeInteger("0");
+		}
+	
+	if(this->compareTo(h) == -1) { // this smaller than h
+		if (!aNeg && !bNeg) { // both pos
+			sub += "-" + another_h.stdsub(*this).toString();
+			return HugeInteger(sub);
+		}
+		if (aNeg && bNeg) { // both neg
+			sub += "-" + stdsub(HugeInteger(h)).toString();
+			return HugeInteger(sub);
+		}
+		if (aNeg && !bNeg) {
+			sub += "-" + Positiveadd(HugeInteger(h)).toString();
+			return HugeInteger(sub);
+		}
+	}
+//------------------------------------------------------------------------------//
+
+
+	// making them the same size by adding leading 0s to the smaller one
+	if (this->number.size() < temp_h.size()) {
+		int diff = temp_h.size() - this->number.size();
+		for (int i = 0; i < diff; i++) {
+			this->number.insert(this->number.begin(), 0);
+		}
+	}
+	else {
+		int diff = this->number.size() - temp_h.size();
+		for (int i = 0; i < diff; i++) {
+			temp_h.insert(temp_h.begin(), 0);
+		}
+	}
+
+	if (!aNeg && bNeg) { return Positiveadd(HugeInteger(h)); }
+
+	if (!aNeg && bNeg || aNeg && !bNeg) {
+		std::string output = Positiveadd(HugeInteger(h)).toString();
+		output.std::string::insert(0, "-");
+		return HugeInteger(output);
+	}
+	
+}
+
+HugeInteger HugeInteger::stdsub(const HugeInteger& h) {
 	std::string sub;
 	std::vector<int> temp_h = h.number;
+
 	if (this->number.size() < temp_h.size()) {
 		int diff = temp_h.size() - this->number.size();
 		for (int i = 0; i < diff; i++) {
@@ -142,49 +293,65 @@ representing the difference between this HugeInteger and h.*/
 			borrow = 0;
 		sub.std::string::insert(0, 1, digit1 + 48);
 	}
-	return HugeInteger(sub);
+	// remove leading zeros
+	int start = 0;
+	for (int i = 0; i < sub.size(); i++) {
+		if (sub[i] != '0') {
+			start = i;
+			break;
+		}
+	}
+	return HugeInteger(sub.substr(start));
 }
 
 HugeInteger HugeInteger::multiply(const HugeInteger& h) {
-	// TODO
+	// TODO 
+
 	return HugeInteger("");
 }
 
+
+
 int HugeInteger::compareTo(const HugeInteger& h) {
-	// if this has more digits or if this is positive and h is negative
-	if ((!this->sign && h.sign) || this->number.size() > h.number.size() ) {
-		return 1;
-	}
-	// if h has more digits or if h is positive and this is negative
-	else if ((!h.sign && this->sign) || h.number.size() > this->number.size() ) {
+	/*Returns -1 if this HugeInteger is less
+than h, 1 if this HugeInteger is larger than h, and 0 if this HugeInteger is equal
+to h.*/
+
+	if (!h.sign && this->sign) { // h positive and this negative - h is bigger
 		return -1;
 	}
+	else if ((h.sign && !this->sign)) { // h negative and this positive - this is bigger 
+		return 1;
+	}
+
+	// if this has more digits than h
+	if (this->number.size() > h.number.size() ) {
+		if (!this->sign && !h.sign)
+			return 1;
+		else return -1;
+	}
+	// if h has more digits than this
+	else if (h.number.size() > this->number.size() ) {
+		if (!h.sign && !this->sign)
+			return -1;
+		else return 1;
+	}
+
+
 	else { // same length
-		//std::_Vector_iterator<std::_Vector_val<std::_Simple_types<int>>> it_this = this->number.begin();
-		//auto it_h = h.number.begin();
-
-		//auto MSB_this = this->number.front();
-		//auto MSB_h = h.number.front();
-
+		// compare most significant bits
 		for (int i = 0; i < this->number.size(); i++) {
 			if (this->number[i] > h.number[i]) {
-				return 1;
+				if (!this->sign && !h.sign)
+					return 1;
+				else return -1;
 			}
 			else if (h.number[i] > this->number[i]) {
-				return -1;
+				if (!this->sign && !h.sign)
+					return -1;
+				else return 1;
 			}
 			else return 0;
-			/*
-			if (MSB_this > MSB_h)
-				return 1;
-			else if (MSB_h > MSB_this) {
-				return -1;
-			}
-			else return 0;
-
-			it_this++;
-			it_h++;
-			*/
 		}
 	}
 }
@@ -195,9 +362,7 @@ std::string HugeInteger::toString() {
 corresponding to the decimal representation of this HugeInteger */
 
 	std::string output;
-	if (sign) {
-		output += "-";
-	}
+	if (sign) {output += "-";}
 	for (int i = 0; i < this->number.size(); i++) {
 		output += std::to_string(this->number[i]);
 	}
