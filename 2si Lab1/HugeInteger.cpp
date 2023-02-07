@@ -305,37 +305,23 @@ HugeInteger HugeInteger::stdsub(const HugeInteger& h) {
 	return HugeInteger(sub.substr(start));
 }
 HugeInteger HugeInteger::multiply(const HugeInteger& h) {
-	HugeInteger result;
-	HugeInteger a = *this;
-	HugeInteger b = h;
-	if (this->toString() == "0" || b.toString() == "0") {
+	HugeInteger result, a = *this, b = h;
+	
+	if ((this->number[0] == 0 && this->number.size() == 1) || (b.number[0] == 0 && b.number.size() == 1)) {
 		return HugeInteger("0");
 	}
-	if (this->toString() == "1") {
-		return HugeInteger(h);
-	}
-	if (b.toString() == "1") {
-		return HugeInteger(*this);
-	}
-	if (a.number.size() < b.number.size()) {
-		std::swap(a, b);
-	}
+	
 	result.number.resize(a.number.size() + b.number.size(), 0);
 	result.sign = a.sign ^ b.sign;
 
-	//int carry = 0;
 	for (int i = a.number.size() - 1; i >= 0; i--) {
 		for (int j = b.number.size() - 1; j >= 0; j--) {
 			result.number[i + j + 1] += a.number[i] * b.number[j];
-			//carry = result.number[i + j] / 10;
 			result.number[i + j] += result.number[i + j + 1] / 10;
 			result.number[i + j + 1] %= 10;
 		}
 	}
-	while (result.number[0] == 0)
-		{
-				result.number.erase(result.number.begin());
-			}
+	while (result.number[0] == 0){result.number.erase(result.number.begin());}
 	return result;
 }
 //HugeInteger HugeInteger::multiply(const HugeInteger& h) {
