@@ -2,6 +2,9 @@
 #define BSTSET_H_
 
 #include "TNode.h"
+#include "LLNode.h"
+#include "MyStack.h"
+#include <iostream>
 #include <vector>
 
 class BSTSet
@@ -20,23 +23,30 @@ public:
 	bool isIn(int v);
 	void add(int v);
 	bool remove(int v);
-	void Union(TNode* node);
-	void intersection(TNode* node);
+	void Union(const BSTSet& s);
+	void intersection(const BSTSet& s);
 	void difference(const BSTSet& s);
 	int size();
 	int height();
 	void printNonRec(); // create and use class MyStack
 
+	void insert(int data, TNode* &node);
+	void deleteTree(TNode* node);
+	bool isInTree(int v, TNode* node);
+	bool removeNode(int v, TNode* &node);
+	int getSize(int x, TNode* node);
+	int getMax(TNode* node);
+	int getMin(TNode* node);
+	void Union(TNode* node);
+	void intersect(TNode* node, TNode* s);
+	void difference(TNode* node, TNode* s);
+	int getHeight(TNode* node);
+
+
+
 	// provided recursive print method
 	void printBSTSet();
-	void insert(int v, TNode* &Node);
-	void Destruction(TNode* node);
-	void RealRemove(int v, TNode* root);
-	 int findMin(TNode* b);
-	 bool removeNode(int v, TNode*& node);
-	 int getMax(TNode* node);
-	 bool isInTree(int v, TNode* node);
-	// void intersect(TNode* node, TNode* s);
+
 	// Used for testing
 	TNode* getRoot()
 	{
