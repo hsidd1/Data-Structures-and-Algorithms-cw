@@ -20,8 +20,8 @@ public:
 	bool isIn(int v);
 	void add(int v);
 	bool remove(int v);
-	void Union(const BSTSet& s);
-	void intersection(const BSTSet& s);
+	void Union(TNode* node);
+	void intersection(TNode* node);
 	void difference(const BSTSet& s);
 	int size();
 	int height();
@@ -29,7 +29,14 @@ public:
 
 	// provided recursive print method
 	void printBSTSet();
-	void insert(v, TNode*& Node);
+	void insert(int v, TNode* &Node);
+	void Destruction(TNode* node);
+	void RealRemove(int v, TNode* root);
+	 int findMin(TNode* b);
+	 bool removeNode(int v, TNode*& node);
+	 int getMax(TNode* node);
+	 bool isInTree(int v, TNode* node);
+	// void intersect(TNode* node, TNode* s);
 	// Used for testing
 	TNode* getRoot()
 	{
