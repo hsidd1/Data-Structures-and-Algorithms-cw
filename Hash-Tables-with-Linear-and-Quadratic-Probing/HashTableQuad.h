@@ -7,7 +7,7 @@ class HashTableQuad
 {
 private:
 	// must contain this private field
-	std::vector<int> table;
+	std::vector<int> table; // table storing keys
 	// define other private fields to store:
 	// 1. the size of the table
 	// 2. the number of keys stored in the table

@@ -7,11 +7,14 @@ class HashTableLin
 {
 private:
 	// must contain this private field
-	std::vector<int> table;
-	// define other private fields to store:
+	std::vector<int> table; // table storing keys
+	// defining other private fields to store:
 	// 1. the size of the table
+	int size;
 	// 2. the number of keys stored in the table
+	int num_keys;
 	// 3. the maximum load factor allowed
+	double max_lf;
 
 public:
 	// required constructor
@@ -27,6 +30,9 @@ public:
 	double getMaxLoadFactor();
 	static std::vector<double> simProbeSuccess();
 	static std::vector<double> simProbeUnsuccess(); // for bonus
+
+	// additional methods
+	bool isPrime(int num);
 
 	// used for testing
 	std::vector<int> getTable() {
