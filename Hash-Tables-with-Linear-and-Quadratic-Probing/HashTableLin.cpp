@@ -1,5 +1,6 @@
 #include "HashTableLin.h"
 #include <cmath>
+#include <iostream>
 using namespace std;
 
 /*
@@ -24,7 +25,7 @@ HashTableLin::HashTableLin(int maxNum, double load)
     }
 }
  // self explanatory - checks if input int is prime 
-bool HashTableLin::isPrime(int num){
+bool HashTableLin::isPrime(int num){ // O(sqrt(n)) worst case
     if (num <= 1) return false;
     for (int i = 2; i <= std::sqrt(num); i++)
     {
@@ -96,21 +97,48 @@ void HashTableLin::rehash()
     }
 }
 
-
-bool HashTableLin::isIn(int n)
+/*
+* returns true if key n is in this hash table. It returns
+false otherwise
+*/
+bool HashTableLin::isIn(int n) // runs O(1) on avg unless high load factor - O(n) worst case
 {
-    // TODO, change following code after completing this function
-    return true;
+    int index = n % size; 
+    while (table[index]) {
+        if (table[index] == n) {
+            return true;
+        }
+        // probe next
+        index = (index + 1) % size;
+    }
+    return false;
 }
+
+//an O(n) only implementation (cringe) for fun:
+//bool HashTableLin::isIn(int n)
+//{
+//    for (int i = 0; i < table.size(); i++) {
+//        if (table[i] == n) {
+//            return true;
+//        }
+//    }
+//    return false;
+//}
 
 void HashTableLin::printKeys()
 {
-    // TODO
+    for (int i = 0; i < table.size(); i++)
+    {
+        std::cout << table[i] << std::endl;
+    }
 }
 
 void HashTableLin::printKeysAndIndexes()
 {
-    // TODO
+    for (int i = 0; i < table.size(); i++)
+    {
+        std::cout << "Index: " << i << "key: " << table[i] << std::endl;
+    }
 }
 
 
@@ -130,15 +158,6 @@ std::vector<double> HashTableLin::simProbeUnsuccess()
 }
 
 // getter methods for priv fields 
-
-int HashTableLin::getNumKeys() {
-    return num_keys;
-}
-
-int HashTableLin::getTableSize() {
-    return size;
-}
-
-double HashTableLin::getMaxLoadFactor() {
-    return max_lf;
-}
+int HashTableLin::getNumKeys() {return num_keys;}
+int HashTableLin::getTableSize() {return size;}
+double HashTableLin::getMaxLoadFactor() {return max_lf;}
