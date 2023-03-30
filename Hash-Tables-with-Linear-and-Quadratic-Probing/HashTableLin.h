@@ -34,6 +34,9 @@ public:
 	// additional methods
 	bool isPrime(int num);
 	int linProbeIndex(int n);
+	int insertCount(int n);
+	int linProbeInterations(int n);
+	int isInFalseCount(int n);
 
 	// used for testing
 	std::vector<int> getTable() {

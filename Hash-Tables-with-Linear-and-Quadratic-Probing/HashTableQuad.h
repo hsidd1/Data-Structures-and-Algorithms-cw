@@ -33,6 +33,8 @@ public:
 	// added stuff
 	bool isPrime(int num);
 	int quadProbeIndex(int n);
+	int insertCount(int n);
+	int quadProbeInterations(int n);
 	// used for testing
 	std::vector<int> getTable() {
 		return table;

@@ -4,6 +4,16 @@ using namespace std;
 
 int main()
 {
+    std::vector<int> input{116};
+    HashTableQuad table(1,0.5);
+
+    for (int i = 0; i < input.size(); i++)
+    {
+        table.insert(input[i]);
+    }
+    
+    table.insert(118);
+
     int max_run = 50;
     int max_key = 1000;
     vector<int> max_size_array = { 1, 5, 10 };
@@ -33,4 +43,5 @@ int main()
     cout << "********************************" << endl;
 
 	return 0;
+    
 }
