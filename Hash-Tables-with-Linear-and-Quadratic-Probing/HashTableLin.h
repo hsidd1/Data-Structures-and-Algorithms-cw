@@ -33,6 +33,7 @@ public:
 
 	// additional methods
 	bool isPrime(int num);
+	int linProbeIndex(int n);
 
 	// used for testing
 	std::vector<int> getTable() {
