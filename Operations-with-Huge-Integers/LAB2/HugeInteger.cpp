@@ -306,24 +306,18 @@ HugeInteger HugeInteger::multiply(const HugeInteger& h) {
 	return HugeInteger(res);
 }
 std::string HugeInteger::karatsuba(std::string left_side, std::string right_side) {
-	//Computes the length of the longer input number lhs or rhs.
+	//Computes the length of the longer input number lhs or rhs
 	int length = std::max(left_side.size(), right_side.size());
-	//Pads the rhs number with zeros to ensure that both input numbers have the same length.
+	//Pads the rhs number with zeros to ensure that both input numbers have the same length
 	while (right_side.size() < length)
 		right_side.insert(0, "0");
-	//Pads the lhs number with zeros to ensure that both input numbers have the same length.
+	//Pads the lhs number with zeros to ensure that both input numbers have the same length
 	while (left_side.size() < length)
 		left_side.insert(0, "0");
 
-	
-
-	//If the length of both input numbers is 1, returns their product as a string.
+	//If the length of both input numbers is 1, returns their product as a string
 	if (length == 1)
 		return std::to_string((left_side[0] - '0') * (right_side[0] - '0'));
-
-	// return std::to_string((lhs[0] - '0') * (rhs[0] - '0'));
-
-	//Divides both lhs and rhs into two parts each, with lhs0 and rhs0 being the first half and lhs1 and rhs1 being the second half.
 	
 	std::string right_first = right_side.substr(0, length / 2);
 	std::string right_second = right_side.substr(length / 2, length - length / 2);
@@ -350,6 +344,8 @@ std::string HugeInteger::karatsuba(std::string left_side, std::string right_side
 		0, std::min(result.find_first_not_of('0'), result.size() - 1));
 }
 
+// multiply in O(n^2) complexity 
+
 //HugeInteger HugeInteger::multiply(const HugeInteger& h) {
 //	HugeInteger result, a = *this, b = h;
 //	
@@ -370,78 +366,7 @@ std::string HugeInteger::karatsuba(std::string left_side, std::string right_side
 //	while (result.number[0] == 0){result.number.erase(result.number.begin());}
 //	return result;
 //}
-//HugeInteger HugeInteger::multiply(const HugeInteger& h) {
-//	HugeInteger result;
-//	HugeInteger a = *this;
-//	HugeInteger b = h;
-//	if (this->toString() == "0" || b.toString() == "0") {
-//		return HugeInteger("0");
-//	}
-//	if (this->toString() == "1" && number.size() == 1) {
-//		return HugeInteger(h);
-//	}
-//	if (b.toString() == "1" && h.number.size() == 1) {
-//		return HugeInteger(*this);
-//	}
-//	if (a.number.size() < b.number.size()) {
-//		std::swap(a, b);
-//	}
-//	result.number.resize(a.number.size() + b.number.size(), 0);
-//	result.sign = a.sign ^ b.sign;
-//
-//	for (int i = a.number.size() - 1; i >= 0; i--) {
-//		for (int j = b.number.size() - 1; j >= 0; j--) {
-//			result.number[i + j + 1] += a.number[i] * b.number[j];
-//			result.number[i + j] += result.number[i + j + 1] / 10;
-//			result.number[i + j + 1] %= 10;
-//		}
-//	}
-//	//hile (result.number.size() > 1 && result.number.back() == 0) {
-//	//	result.number.pop_back();
-//	
-//
-//	while (result.number[0] == 0)
-//	{
-//		result.number.erase(result.number.begin());
-//	}
-//	return result;
-//}
 
-/*
-HugeInteger HugeInteger::multiply(const HugeInteger& h) {
-	HugeInteger b = h;
-	if (this->toString() == "0" || b.toString() == "0") { 
-		return HugeInteger("0"); 
-	}
-	HugeInteger a = *this;
-	HugeInteger result = HugeInteger();
-	result.number.resize(a.number.size() + b.number.size() - 1, 0);
-
-	int sign = 1;
-	if (a.sign != b.sign) {
-		sign = -1;
-	}
-
-	for (int i = 0; i < a.number.size(); i++) {
-		for (int j = 0; j < b.number.size(); j++) {
-			result.number[i + j] += a.number[i] * b.number[j];
-			result.number[i + j + 1] += result.number[i + j] / 10;
-			result.number[i + j] %= 10;
-		}
-	}
-
-	result.sign = (sign == 1) ? false : true;
-	// remove leading zeros
-	std::string res = result.toString();
-	int start = 0;
-	for (int i = 0; i < result.number.size(); i++) {
-		if (res[i] != '0') {
-			start = i;
-			break;
-		}
-	}	return HugeInteger(res.substr(start));
-}
-*/
 
 
 
