@@ -6,14 +6,13 @@
 class HashTableLin
 {
 private:
-	// must contain this private field
 	std::vector<int> table; // table storing keys
-	// defining other private fields to store:
-	// 1. the size of the table
+
+	// the size of the table
 	int size;
-	// 2. the number of keys stored in the table
+	//the number of keys stored in the table
 	int num_keys;
-	// 3. the maximum load factor allowed
+	//the maximum load factor allowed
 	double max_lf;
 
 public:
@@ -35,8 +34,8 @@ public:
 	bool isPrime(int num);
 	int linProbeIndex(int n);
 	int insertCount(int n);
-	int linProbeInterations(int n);
-	int isInFalseCount(int n);
+	int linProbeIterations(int n);
+	int unsuccessIsIn(int n);
 
 	// used for testing
 	std::vector<int> getTable() {

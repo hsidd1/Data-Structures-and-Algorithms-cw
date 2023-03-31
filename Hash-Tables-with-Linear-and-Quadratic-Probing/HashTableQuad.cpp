@@ -6,7 +6,7 @@ HashTableQuad::HashTableQuad(int maxNum, double load)
     max_lf = load;
     num_keys = 0;
     int temp_size = std::ceil(maxNum / load); // size before checking prime
-    // find the nearest prime number -- increment until prime
+    // find the nearest prime number for size
     while (!isPrime(temp_size)) {
         temp_size++;
     }
@@ -14,12 +14,7 @@ HashTableQuad::HashTableQuad(int maxNum, double load)
     size = temp_size;
     // fill table
     table.resize(size);
-    /*for (int i = 0; i < size; i++)
-    {
-        table.push_back(0);
-    }*/
 }
-// self explanatory - checks if input int is prime 
 bool HashTableQuad::isPrime(int num) { // O(sqrt(n)) worst case
     if (num <= 1) return false;
     for (int i = 2; i <= std::sqrt(num); i++)
@@ -31,42 +26,6 @@ bool HashTableQuad::isPrime(int num) { // O(sqrt(n)) worst case
     return true;
 }
 
-//void HashTableQuad::insert(int n)
-//{
-//    int index = quadProbeIndex(n);
-//    if (index != -1) // -1 index indicates value is already in hash table
-//    {
-//        // check if adding a key will exceed max load factor 
-//        if (double(num_keys + 1) / double(size) > max_lf)
-//        {
-//            // rehash and recompute index with linear probing
-//            rehash();
-//            index = quadProbeIndex(n);
-//
-//        }
-//        // insertion index found - insert in table
-//        table[index] = n;
-//        num_keys++;
-//    }
-//}
-//
-///*
-//* Returns index to insert using quadratic probing
-//*/
-//int HashTableQuad::quadProbeIndex(int n) {
-//    // hash function n % M
-//    int probe = n % size;
-//    int i = 0;
-//    // quadratic probe until an empty position or key that is being searched is found
-//    while (table[probe] != 0 && table[probe] != n && i < size) {
-//        probe = (probe + i * i) % size;
-//        i++;
-//    }
-//    // flag -1 if already in table, else return index
-//    return (table[probe] == n) ? -1 : ((i == size) ? -1 : probe);
-//}
-//
-//
 void HashTableQuad::rehash()
 {
     std::vector<int> oldTable = table;
@@ -87,45 +46,25 @@ void HashTableQuad::rehash()
         }
     }
 }
-//
-//bool HashTableQuad::isIn(int n) {
-//    int probe = n % size;
-//    int i = 0;
-//    while (i < size) {
-//        if (table[probe] == n) {
-//            return true;
-//        }
-//        if (!table[probe]) {
-//            return false;
-//        }
-//        // probe next
-//        probe = (probe + i * i) % size;
-//        i++;
-//    }
-//    return false;
-//}
+
 void HashTableQuad::insert(int n)
 {
     int index = quadProbeIndex(n);
     if (index != -1) // -1 index indicates value is already in hash table
     {
         // check if adding a key will exceed max load factor 
-        // insertion index found - insert in table
         if (((double)(num_keys+1) / (double)(size)) > max_lf)
         {
-                //cout << "pre-rehash" << endl;
-                //printKeysAndIndexes();
-                // rehash and recompute index with quadratic probing
-                rehash();
-                index = quadProbeIndex(n);
+               
+            // rehash and recompute index with quadratic probing
+            rehash();
+            index = quadProbeIndex(n);
             if (index == -1) {
                 return;
             }
         }
         num_keys++;
         table[index] = n;
-        //cout << "after rehash" << endl;
-        //printKeysAndIndexes();
     }
 }
 
@@ -145,7 +84,7 @@ int HashTableQuad::quadProbeIndex(int n) {
     return (table[probe] == n) ? -1 : ((i == size) ? -1 : probe);
 }
 
-bool HashTableQuad::isIn(int n)
+bool HashTableQuad::isIn(int n) // check if n is in hash table without O(1) avg case for small lf
 {
     int probe = n % size;
     int i = 1;
@@ -211,8 +150,7 @@ std::vector<double> HashTableQuad::simProbeSuccess()
 int HashTableQuad::insertCount(int n) {
     // counts inserts 
     int index = quadProbeIndex(n);
-    int count = quadProbeInterations(n);
-    int num_probes = 1;
+    int count = quadProbeIterations(n);
     if (index != -1) // -1 index indicates value is already in hash table
     {
         // check if adding a key will exceed max load factor 
@@ -221,17 +159,16 @@ int HashTableQuad::insertCount(int n) {
             //rehash and recompute index with linear probing
             rehash();
             index = quadProbeIndex(n);
-            count = quadProbeInterations(n);
+            count = quadProbeIterations(n);
         }
         // insertion index found - insert in table
         table[index] = n;
-        //num_probes++;
         num_keys++;
     }
     return count;
 }
 
-int HashTableQuad::quadProbeInterations(int n) {
+int HashTableQuad::quadProbeIterations(int n) {
     // hash function n % M
     int probe = n % size;
     int i = 0;
