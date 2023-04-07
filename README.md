@@ -7,7 +7,7 @@ Coursework for Data Structures and Algorithms course.
 ### [Operations with Huge Integers](/Operations-with-Huge-Integers/)
 
 The range of integers that can be represented in C++ using a primitive data
-type is only from −2^63 to 2^63 − 1. What if we need to manipulate integer values beyond
+type is only from $−2^{63} \ \text{to} \ 2^{63} − 1$. What if we need to manipulate integer values beyond
 this range?
 
 This project implements a HugeInteger class which is able to represent arbitrar-
@@ -36,4 +36,4 @@ representable by the int data type.
 
 ## Notes
 
-All labs here are configured as .sln C++ projects on Visual Studio.
+All labs here are configured as `.sln` C++ projects on Visual Studio.
